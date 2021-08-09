@@ -1,0 +1,8 @@
+ben, deliveries, collect May petty cash, 1 July 2021, 15 July 2021, yes, 1
+admin, cleanup, delete inactive users, 5 July 2021, 6 July 2021, no, 2
+fanzo, debtors, send out statements, 5 July 2021, 31 July 2021, no, 3
+lucy, creditors, submit payments, 5 July 2021, 07 July 2021, no, 4
+admin, maintenance, double-check user permissions, 5 July 2021, 07 July 2021, no, 5
+simza, compliance, submit VAT201, 25 June 2021, 30 June 2021, no, 6
+ivan, compliance, submit EMP201, 1 July 2021, 28 February 2022, no, 7
+fanzo, cashbook, reconcile the cashbook, 1 July 2021, 05 July 2021, no, 8

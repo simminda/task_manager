@@ -1,0 +1,35 @@
+Task Count
+ben:1
+admin:2
+fanzo:2
+lucy:1
+simza:1
+ivan:1
+All Users: 8
+
+Task Distribution
+ben	: 12.5 %
+admin	: 25.0 %
+fanzo	: 25.0 %
+lucy	: 12.5 %
+simza	: 12.5 %
+ivan	: 12.5 %
+
+Incomplete Tasks
+Count	= 7
+admin	: 28.57 %
+fanzo	: 28.57 %
+lucy	: 14.29 %
+simza	: 14.29 %
+ivan	: 14.29 %
+
+Complete Tasks
+Count	= 1
+ben	: 100.0 %
+
+Overdue Tasks
+Count	= 5
+admin	: 40.0 %
+lucy	: 20.0 %
+simza	: 20.0 %
+fanzo	: 20.0 %
