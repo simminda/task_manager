@@ -1,32 +1,54 @@
+''' 
+A Task Manager program to keep track of all duties per assigned individual within an organisation.
+Features provided:
+- user authentication/Login
+- task management
+- viewing of tasks and filtering by user
+- user/task reports and statistics
+'''
+
 from datetime import datetime
-from genericpath import isfile
 import os
+from getpass import getpass
 
-# Define functions to be used in the program
+# Defining constants
+TOP_LINE = "\n----------------------------------------------------"
+BOTTOM_LINE = "----------------------------------------------------"
 
-def reg_user():         # register a user
+
+def reg_user():        
         username = "admin"
         new_user = False
         admin_pass_check = False
         new_user_pass_check = False
-        while admin_pass_check is False:        # Confirm admin password to prevent accidental access by lower user
+
+        # Confirm admin password to prevent accidental access by lower user
+        while admin_pass_check is False:        
             password = input("\nPlease confirm admin password: ")
             with open("user.txt", "r") as f:                
                 for line in f:
                     if  username in line and password in line:
                         admin_pass_check = True 
-        while new_user is False:                # Capture new user avoiding repeat user name
+        
+        # Capture new user avoiding repeat user name
+        while new_user is False:                
             with open("user.txt", "r+") as f:
                 username = input("\nPlease enter username for new user: ").lower()
                 for line in f:
                     column = line.split(",")
                     if username in column[0]:
-                        print("\nUsername already exists. Please try again")
+                        print(TOP_LINE)
+                        print("✘ Username already exists. Please try again")
+                        print(BOTTOM_LINE)
                     else:
                         new_user = True
-                        print(f"\nNew username is: {username}")
+                        print(TOP_LINE)
+                        print(f"New username is: {username}")
+                        print(BOTTOM_LINE)
                         f.write("\n"+username+", ")
-        while new_user_pass_check is False:     # Capture password for new user and ensure confirmation via double entry
+        
+        # Capture password for new user and ensure confirmation via double entry
+        while new_user_pass_check is False:     
             with open("user.txt", "a") as f:
                 pass1 = ""
                 pass2 = " "
@@ -36,12 +58,16 @@ def reg_user():         # register a user
                     if pass1 == pass2:
                         new_user_pass_check = True
                         f.write(pass1)
-                        print("\nSuccessfully registered!\n")
+                        print(TOP_LINE)
+                        print("✦ Successfully registered!")
+                        print(BOTTOM_LINE)
                     else:
-                        print("\nPasswords do not match")  
+                        print(TOP_LINE)
+                        print("✘ Passwords do not match")  
+                        print(BOTTOM_LINE)
 
 
-def add_task():         # adds a task
+def add_task():        
     print("\n\n* Add Task *")
     username = input("\nEnter user to assign to task: ").lower()
     task = input("Enter title of task: ").lower()
@@ -51,13 +77,18 @@ def add_task():         # adds a task
     completion = input("Is the task completed yet? ").lower()
         
     with open("tasks.txt", "a") as f:
-            f.write("\n" + username + ", " + task + ", " + task_desc + ", " + start_date + ", " + due_date + ", " + completion)
+            f.write("\n" + username + ", " + task + ", " + task_desc + ", " 
+                    + start_date + ", " + due_date + ", " + completion)
+    
+    print(TOP_LINE)
+    print("✦ Thank You. Task has been added")   
+    print(BOTTOM_LINE) 
 
-    print("\nThank You. Task has been added")    
 
-
-def view_all():         # views all tasks
-        print(f"\n* All Tasks * \n")
+def view_all():
+        print("\033[1;32m",TOP_LINE)        
+        print(" ALL TASKS ")
+        print(BOTTOM_LINE) 
         with open("tasks.txt", "r") as f:
             for line in f:
                 column = line.split(", ")
@@ -67,11 +98,17 @@ def view_all():         # views all tasks
                 print(f"Start Date\t\t: {column[3]}")
                 print(f"Due Date\t\t: {column[4]}")
                 print(f"Completed?\t\t: {column[5]}")
+        print("\033[0m")
 
 
-def main_menu():            # Present appropriate Home Screen based on the user and take user selection
+def main_menu():             
+    '''
+    Present appropriate Home Screen based on the user and take user selection
+    '''
     if username == 'admin':
-        print("\n\n*** Welcome to Task Manager ***")
+        print("       \033[1;32m  ╔═══════════════════════════╗ ")
+        print("═════════   WELCOME TO TASK MANAGER   ═════════")
+        print("         ╚═══════════════════════════╝ ")
         print("\nPlease select one of the following options:")
         print("r - register user")
         print("a - add task")
@@ -79,14 +116,16 @@ def main_menu():            # Present appropriate Home Screen based on the user 
         print("vm - view my tasks")
         print("gr - generate reports")
         print("s - display statistics")
-        print("e - exit\n")
+        print("e - exit\n\033[0m")
     else:
-        print("\n\n*** Welcome to Task Manager ***")
+        print("       \033[1;32m  ╔═══════════════════════════╗ ")
+        print("═════════   WELCOME TO TASK MANAGER   ═════════")
+        print("         ╚═══════════════════════════╝ ")
         print("\nPlease select one of the following options:")
         print("a - add task")
         print("va - view all tasks")
         print("vm - view my tasks")
-        print("e - exit\n")
+        print("e - exit\n\033[0m")
     
     # Request user input and call on appropriate function
     selection_validation = False
@@ -114,13 +153,18 @@ def main_menu():            # Present appropriate Home Screen based on the user 
         elif selection == "e":      
             selection_validation = True
             exit()
-        else:                       # Keep loop going for invalid feature selection
+        else:                       
             print("\nInvalid Selection. Please try again.\n")
 
 
-def view_mine():            # views user specific tasks
-    while True:             # looping through function so program doesn't close after every task edit
-        print(f"\n\n* Tasks for {username} * \n")
+def view_mine():             
+    '''
+    views user specific tasks
+    '''
+    while True:     # looping through function so program doesn't close after every task edit
+        print("\033[1;32m",TOP_LINE)
+        print(f"* Tasks for {username} * ")
+        print(BOTTOM_LINE) 
         with open ("tasks.txt", "r") as f:
             index = 0
             for line in f:
@@ -134,25 +178,27 @@ def view_mine():            # views user specific tasks
                     print(f"Due Date\t\t: {column[4]}")
                     print(f"Completed?\t\t: {column[5]}")
                     print("") 
+            print("\033[0m")
             if index == 0:
-                print("No active tasks found\n")
+                print("\u001b[31m✘ No active tasks found\n\033[0m")
                 exit()
-
-            if index != 0:
+            elif index != 0:
                 task_to_edit = int(input("Enter a task number to edit or '-1' to return to main menu: "))
 
                 if task_to_edit == -1:
+                    print(TOP_LINE)
                     print("Thank You")
+                    print(BOTTOM_LINE)
                     main_menu() 
-                    break;  # stops next line within function from being called                  
+                    break;                   
 
         # read lines in file. edit the line with the task number entered
         f = open("tasks.txt","r")
         list_of_lines = f.readlines()
-        print("\nWhat would you like to do? ")
+        print("\033[1;32m\nWhat would you like to do? ")
         print("a - mark as complete")
         print("b - mark as incomplete")
-        print("c - edit task details\n")
+        print("c - edit task details\n\033[0m")
         
         selection_validation = False
 
@@ -160,53 +206,60 @@ def view_mine():            # views user specific tasks
             selection = input("\nEnter Selection: ").lower()
             if selection == 'a':
                 selection_validation = True
-                line_to_edit = list_of_lines[task_to_edit-1]                # isolate line to edit
-                list_line_to_edit = line_to_edit.strip("\n").split(", ")    # isolate words in line to edit
-                list_line_to_edit[5] = "yes"                                # isolate and edit the 6th word in line to edit
-                line_to_edit = str(list_line_to_edit)                       # go back to line to edit 
-                line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     # remove excess characters to match read to write format
-                list_of_lines[task_to_edit-1] = line_to_edit + "\n"         # update the list of lines with edited line
-                f = open("tasks.txt","w")                                   # write lines back to file (with updated line)
+                line_to_edit = list_of_lines[task_to_edit-1]                # Isolate line to edit
+                list_line_to_edit = line_to_edit.strip("\n").split(", ")    # Isolate words in line to edit
+                list_line_to_edit[5] = "yes"                                # Isolate and edit the 6th word in line to edit
+                line_to_edit = str(list_line_to_edit)                       # Go back to line to edit 
+                line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     # Remove excess characters to match read to write format
+                list_of_lines[task_to_edit-1] = line_to_edit + "\n"         # Update the list of lines with edited line
+                f = open("tasks.txt","w")                                   # Write lines back to file (with updated line)
                 f.writelines(list_of_lines)
                 f.close()
-                print("\nThank you. Task has been marked as complete. \n")
-
-            if selection == 'b':
+                print(TOP_LINE)
+                print("✦ Thank you. Task has been marked as complete.")
+                print(BOTTOM_LINE)
+            elif selection == 'b':
                 selection_validation = True
-                line_to_edit = list_of_lines[task_to_edit-1]                # isolate line to edit
-                list_line_to_edit = line_to_edit.strip("\n").split(", ")    # isolate words in line to edit
-                list_line_to_edit[5] = "no"                                 # isolate and edit the 6th word in line to edit
-                line_to_edit = str(list_line_to_edit)                       # go back to line to edit 
-                line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     # remove excess characters to match read to write format
-                list_of_lines[task_to_edit-1] = line_to_edit + "\n"         # update the list of lines with edited line
-                f = open("tasks.txt","w")                                   # write lines back to file (with updated line)
+                line_to_edit = list_of_lines[task_to_edit-1]                
+                list_line_to_edit = line_to_edit.strip("\n").split(", ")    
+                list_line_to_edit[5] = "no"                                 
+                line_to_edit = str(list_line_to_edit)                       
+                line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     
+                list_of_lines[task_to_edit-1] = line_to_edit + "\n"         
+                f = open("tasks.txt","w")                                   
                 f.writelines(list_of_lines)
                 f.close()
-                print("\nThank you. Task has been marked as incomplete. ")
-
-            if selection == 'c':
+                print(TOP_LINE)
+                print("✦ Thank you. Task has been marked as incomplete.")
+                print(BOTTOM_LINE)
+            elif selection == 'c':
                 selection_validation = True
-                line_to_edit = list_of_lines[task_to_edit-1]                # isolate line/task to edit
-                list_line_to_edit = line_to_edit.strip("\n").split(", ")    # isolate columns in line to edit
+                line_to_edit = list_of_lines[task_to_edit-1]                
+                list_line_to_edit = line_to_edit.strip("\n").split(", ")    
                 if list_line_to_edit[5] == "yes":
-                    print("\nSorry, this task has been marked as complete and cannot be edited")
+                    print(TOP_LINE)
+                    print("✘ Sorry, this task has been marked as complete and cannot be edited")
+                    print(BOTTOM_LINE)
                     main_menu()
-                    break;
+                    break
                 elif list_line_to_edit[5] == "no":
                     print("\nEdit task\n")
                     list_line_to_edit[0] = input("Confirm user to assign to task: ").lower()
                     list_line_to_edit[4] = input("Confirm Due Date: ")
-                    line_to_edit = str(list_line_to_edit)                       # go back to line to edit 
-                    line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     # remove excess characters to match read to write format
-                    list_of_lines[task_to_edit-1] = line_to_edit + "\n"         # update the list of lines with edited line
-                    f = open("tasks.txt","w")                                   # write lines back to file (with updated line)
+                    line_to_edit = str(list_line_to_edit)                       
+                    line_to_edit = line_to_edit.replace("'", "").strip("[").strip("]")     
+                    list_of_lines[task_to_edit-1] = line_to_edit + "\n"         
+                    f = open("tasks.txt","w")                                  
                     f.writelines(list_of_lines)
                     f.close()
-                    print("\nThank you. Task has been updated. ")            
+                    print(TOP_LINE)
+                    print("✦ Thank you. Task has been updated. ")
+                    print(BOTTOM_LINE)            
 
 
 def view_statistics():
-    pass_check = False                      # request password to prevent accidental access by lower user who knows "s" shortcut
+    # Request password to prevent accidental access by lower user who knows "s" shortcut
+    pass_check = False                      
     while pass_check is False:
         password = input("\nPlease confirm admin password: ")
         with open("user.txt", "r") as f:                
@@ -214,29 +267,34 @@ def view_statistics():
                 if username in line and password in line:
                     pass_check = True  
 
-    isTask = os.path.isfile("task_overview.txt")    # check if files exist. if not call method to generate them
+    # Check if files exist. If not, call method to generate them.
+    isTask = os.path.isfile("task_overview.txt")    
     isUser = os.path.isfile("user_overview.txt")
     if isTask == False or isUser == False:
         generate_reports()
-        
-    print("\n\n* Statistics * \n\n")
-    print("Tasks Overview\n")
+
+    print("\033[1;32m",TOP_LINE)    
+    print(" STATISTICS ")
+    print(BOTTOM_LINE)
+    print("\033[0mTasks Overview\n\033[1;32m")
     with open("task_overview.txt", "r") as f:
         contents = ""
         for line in f:
             contents =contents + line
         print(contents)
 
-    print("\nUser Overview\n")
+    print("\033[0m\nUser Overview\n\033[1;32m")
     with open("user_overview.txt", "r") as f:
         contents = ""
         for line in f:
             contents =contents + line
         print(contents)
-        
+    
+    print("\033[0m")    
+
 
 def generate_reports():
-    pass_check = False                      # request password to prevent accidental access by lower user who knows "gr" shortcut
+    pass_check = False                     
     while pass_check is False:
         password = input("\nPlease confirm admin password: ")
         with open("user.txt", "r") as f:                
@@ -244,7 +302,7 @@ def generate_reports():
                 if username in line and password in line:
                     pass_check = True 
 
-    # this part of my code handles task overview
+    # This part of the code handles task overview
     with open ("tasks.txt", "r") as f:
         line_count = 0
         yes_count = 0
@@ -271,16 +329,18 @@ def generate_reports():
                 f.write(f"\nIncomplete Ratio\t= {(no_count/line_count)*100}%")
                 f.write(f"\nOverdue Ratio\t\t= {(overdue_count/line_count)*100}%")
 
-    # this part of my code handles user overview
-    with open("tasks.txt", "r") as f:           #identify each unique user
+    # This part of the code handles user overview
+    with open("tasks.txt", "r") as f:   
+        # Identify each unique user        
         list_users = []
         for line in f:
             line_list = line.strip("\n").split(", ")        # task list
             list_users.append(line_list[0])                 # add users to a new list
             list_unique_users = set(list_users)             # trim list of duplicate users
             list_unique_users = list(list_unique_users)     # convert to iterable list    
-        
-    with open("tasks.txt", "r") as f:           # Count the score(total recurrance) of each task(line) per user
+
+    # Count the score(total recurrance) of each task(line) per user    
+    with open("tasks.txt", "r") as f:           
         scores = {}
         for line in f:
             words = line.strip("\n").split(", ")
@@ -293,13 +353,14 @@ def generate_reports():
         scores_string = scores                  # temp variable to print out data neatly
         scores_string = str(scores).replace(",","\n").strip('{}').replace("'","").replace(" ","")
         with open("user_overview.txt","w") as f:
-            f.write("Task Count\n"+scores_string)
-            f.write("\nAll Users: "+str(sum))
+            f.write("Task Count\n" + scores_string)
+            f.write("\nAll Users: " + str(sum))
             f.write("\n\nTask Distribution")
             for key in scores:    
                 f.write(f"\n{key}\t: {(scores[key]/sum)*100} %")
-            
-    with open("tasks.txt", "r") as f:           # Count the score of incomplete tasks per user 
+
+    # Count the score of incomplete tasks per user         
+    with open("tasks.txt", "r") as f:           
         scores = {}
         for line in f:
             words = line.strip("\n").split(", ")
@@ -315,7 +376,8 @@ def generate_reports():
             for key in scores:    
                 f.write(f"\n{key}\t: {round((scores[key]/sum)*100, 2)} %")
 
-    with open("tasks.txt", "r") as f:           # Count the score of complete tasks per user
+    # Count the score of complete tasks per user
+    with open("tasks.txt", "r") as f:           
         scores = {}
         for line in f:
             words = line.strip("\n").split(", ")
@@ -331,7 +393,8 @@ def generate_reports():
             for key in scores:    
                 f.write(f"\n{key}\t: {(scores[key]/sum)*100} %")
 
-    with open("tasks.txt", "r") as f:           # Count the score of incomplete + overdue tasks per user
+    # Count the score of incomplete + overdue tasks per user
+    with open("tasks.txt", "r") as f:           
         scores = {}
         for line in f:
             words = line.strip("\n").split(", ")
@@ -348,36 +411,42 @@ def generate_reports():
             f.write("\nCount\t= " + str(sum))
             for key in scores:    
                 f.write(f"\n{key}\t: {(scores[key]/sum)*100} %")
-
-    print("\n\nReports saved to default location")
+    
+    print(TOP_LINE)
+    print("✦ Reports saved to default location")
     print("Thank you")
-
+    print(BOTTOM_LINE)
 
 # Login to program
-
 user = False
 pass_check = False
 users_list = []
 
-with open("user.txt", "r") as f:    # Get existing users_list from file + Get saved password list from file
+# Get existing users_list from file + Get saved password list from file
+with open("user.txt", "r") as f:    
     for line in f:
        column = line.split(",")
        users_list.append(column[0])
-                          
-while user is False:                # use a loop to ask user for username and check against list appended from file
+
+# Ask user for username and check against list appended from file                  
+while user is False:                
     username = input("\nPlease Enter Username: ").lower()
     if username in users_list: 
         user = True
-        print(f"\nWelcome {username}")
+        print(TOP_LINE)
+        print(f"✦ Welcome {username}")
+        print(BOTTOM_LINE)
     else:
-        print("\nUser does not exist.")
-        break;                      # system should not proceed to ask for password if user does not exist
+        print("\n ✘ User does not exist.")
+        break; # System should not proceed to ask for password if user does not exist
 
-    while pass_check is False:      # use a loop to ask user for password and check against file
-        password = input("\nPlease Enter Password: ") 
+    # Ask user for password and check against file
+    while pass_check is False: 
+        password = getpass("\nPlease Enter Password: \n")     
         with open("user.txt", "r") as f:
             for line in f:
-                if username in line and password in line: # check if password entered is in same line as username entered and validated above
+                # Check if password entered is in same line as username entered and validated above
+                if username in line and password in line: 
                     pass_check = True
     
     main_menu()
