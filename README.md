@@ -4,11 +4,15 @@
 ### It can also be used as a performance management system due to its user specific reports and statistics
 
 ##### Features provided:
-*user authentication/Login
-*task addition
-*task view
-*specific user task view
-*specific user task edit
-*users/tasks reports and statistics
+<ul>
+  <li>user authentication/Login</li>
+  <li>task addition</li>
+  <li>task view</li>
+  <li>specific user task view</li>
+  <li>specific user task edit</li>
+  <li>users/tasks reports and statistics</li>
+</ul>
 
 demo access credentials: user = admin; password = adm1n
+
+<img src="Screenshot 2023-03-28 183807.png">
